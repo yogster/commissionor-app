@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Commission Reader</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <h3>Reader details</h3>
+
+  <form [formGroup]="form" (ngSubmit)="logForm()">
+    <ion-list>
+
+      <ion-item>
+        <ion-label stacked>Reader ID</ion-label>
+        <ion-input type="text" formControlName="readerId" ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label stacked>Placement</ion-label>
+        <ion-input type="text"></ion-input>
+      </ion-item>
+
+      <ion-item>
+          <ion-label stacked>Description</ion-label>
+          <ion-input type="text"></ion-input>
+      </ion-item>
+
+    </ion-list>
+
+    <h3>Location details</h3>
+
+    <ion-list>
+    
+      <ion-item>
+        <ion-label stacked>Site</ion-label>
+        <ion-input type="text"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label stacked>Room</ion-label>
+        <ion-input type="text"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label stacked>Door</ion-label>
+        <ion-input type="text"></ion-input>
+      </ion-item>
+    
+    </ion-list>
+
+    <button ion-button block type="submit" [disabled]="!form.valid">Commission</button>
+  </form>
+</ion-content>
