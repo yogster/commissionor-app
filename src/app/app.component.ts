@@ -4,6 +4,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { CommissionReaderPage } from '../pages/commission-reader/commission-reader';
+import { SettingsPage } from '../pages/settings/settings';
 
 @Component({
   templateUrl: 'app.html'
@@ -20,7 +21,8 @@ export class MyApp {
 
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Commission Reader', component: CommissionReaderPage }
+      { title: 'Commission Reader', component: CommissionReaderPage },
+      { title: 'Settings', component: SettingsPage }
     ];
 
   }
