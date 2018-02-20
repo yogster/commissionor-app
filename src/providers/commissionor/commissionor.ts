@@ -27,16 +27,15 @@ export class CommissionorProvider {
     return this.storage.get("commissionor:serverUrl");
   }
 
-  private openEventConnection() {
+  private async openEventConnection() {
     if (this.connection == null) {
-      this.getCommissionorServerUrl().then(url => {
-        if (url)
+      var url = await this.getCommissionorServerUrl();
+      if (url)
         {
           this.connection = new HubConnection(url);
           this.connection.on('event', data => this.events.publish("commissionor:tap", data));
-          this.connection.start();
+          this.connection.start().catch((err) => alert(err.toString()));
         }
-      });
     }
   }
 
