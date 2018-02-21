@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { CommissionorProvider } from '../../providers/commissionor/commissionor';
 import { SettingsProvider } from '../../providers/settings/settings';
+import { Reader } from '../../providers/commissionor/reader';
 
 @Component({
   selector: 'page-commission-reader',
@@ -27,7 +28,9 @@ export class CommissionReaderPage {
 
   private setupForm() {
     this.form = this.formBuilder.group({
-      readerId: ['', Validators.required]
+      readerId: ['', Validators.required],
+      placement: ['', Validators.required],
+      description: ['', Validators.required]
     });
   }
 
@@ -46,5 +49,17 @@ export class CommissionReaderPage {
     this.form.patchValue({
       readerId: eventData.readerId
     });
+  }
+
+  private commissionReader() {
+    var reader = new Reader();
+    reader.id = this.form.value.readerId;
+    reader.placement = this.form.value.placement;
+    reader.description = this.form.value.description;
+
+    this.commissionor.commissionReader(reader).subscribe(
+      () => alert("Reader commissioned"),
+      error => alert(error.message)
+    );
   }
 }

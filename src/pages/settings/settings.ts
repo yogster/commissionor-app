@@ -22,14 +22,14 @@ export class SettingsPage {
     );
   }
 
-  onServerUrlBlur() {
+  private onServerUrlBlur() {
     if (!this.form.value.serverUrl.endsWith("/"))
       this.form.patchValue({
         serverUrl: this.form.value.serverUrl + "/"
       });
   }
 
-  saveSettings() {
+  private saveSettings() {
     this.settings.setCommissionorServerUrl(this.form.value.serverUrl);
   }
 
