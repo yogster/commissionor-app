@@ -1,48 +1,35 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Events } from 'ionic-angular';
-import { Storage } from '@ionic/storage';
 import { HubConnection } from '@aspnet/signalr-client';
 
-/*
-  Generated class for the CommissionorProvider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class CommissionorProvider {
 
   private connection: HubConnection;
 
-  constructor(private events: Events, private storage: Storage) {
-    this.openEventConnection();
+  constructor(private events: Events) {
   }
 
-  set commissionorServerUrl(url: string) {
-    this.storage.set("commissionor:serverUrl", url);
+  openEventConnection(url: string) : Promise<void> {
+    this.closeEventConnection();
+    this.connection = new HubConnection(url + "api/events");
+    this.connection.on('event', data => this.events.publish("commissionor:tap", data));
+    return this.connection.start();
   }
 
-  getCommissionorServerUrl(): Promise<string> {
-    return this.storage.get("commissionor:serverUrl");
-  }
-
-  private async openEventConnection() {
-    if (this.connection == null) {
-      var url = await this.getCommissionorServerUrl();
-      if (url)
-        {
-          this.connection = new HubConnection(url);
-          this.connection.on('event', data => this.events.publish("commissionor:tap", data));
-          this.connection.start().catch((err) => alert(err.toString()));
-        }
-    }
-  }
-
-  private closeEventConnection() {
+  closeEventConnection() {
     if (this.connection) {
       this.connection.stop();
       this.connection = null;
     }
+  }
+
+  subscribeToEvents(handler: (data: any) => void) {
+    this.events.subscribe("commissionor:tap", handler);
+  }
+
+  unsubscribeFromEvents(handler: (data: any) => void) {
+    this.events.unsubscribe("commissionor:tap", handler);
   }
 }

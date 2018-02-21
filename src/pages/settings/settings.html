@@ -14,7 +14,7 @@
   
         <ion-item>
           <ion-label stacked>Commissionor server URL</ion-label>
-          <ion-input type="url" formControlName="serverUrl" ></ion-input>
+          <ion-input type="url" formControlName="serverUrl" (ionBlur)="onServerUrlBlur()" ></ion-input>
         </ion-item>
   
       </ion-list>

@@ -1,15 +1,6 @@
 import { Component } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
-import { Storage } from '@ionic/storage';
-
-import { CommissionorProvider } from '../../providers/commissionor/commissionor'
-
-/**
- * Generated class for the SettingsPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { SettingsProvider } from '../../providers/settings/settings';
 
 @Component({
   selector: 'page-settings',
@@ -19,20 +10,27 @@ export class SettingsPage {
 
   private form : FormGroup;
 
-  constructor(private storage: Storage, private formBuilder: FormBuilder, private commissionor: CommissionorProvider) {
+  constructor(private formBuilder: FormBuilder, private settings: SettingsProvider) {
     this.form = this.formBuilder.group({
       serverUrl: ['', Validators.required]
     });
 
-    commissionor.getCommissionorServerUrl().then(url =>
+    this.settings.getCommissionorServerUrl().then(url => 
       this.form = this.formBuilder.group({
         serverUrl: [url, Validators.required]
       })
     );
   }
 
+  onServerUrlBlur() {
+    if (!this.form.value.serverUrl.endsWith("/"))
+      this.form.patchValue({
+        serverUrl: this.form.value.serverUrl + "/"
+      });
+  }
+
   saveSettings() {
-    this.commissionor.commissionorServerUrl  = this.form.value.serverUrl;
+    this.settings.setCommissionorServerUrl(this.form.value.serverUrl);
   }
 
 }

@@ -9,7 +9,7 @@ import { SettingsPage } from '../pages/settings/settings';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { CommissionorProvider } from '../providers/commissionor/commissionor';
+import { SettingsProvider } from '../providers/settings/settings';
 
 @NgModule({
   declarations: [
@@ -32,7 +32,7 @@ import { CommissionorProvider } from '../providers/commissionor/commissionor';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    CommissionorProvider
+    SettingsProvider
   ]
 })
 export class AppModule {}
