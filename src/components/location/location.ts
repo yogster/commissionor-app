@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 /**
  * Generated class for the LocationComponent component.
@@ -11,4 +12,19 @@ import { Component } from '@angular/core';
   templateUrl: 'location.html'
 })
 export class LocationComponent {
+
+  @Input("locationNumber") locationNumber: number;
+  @Output("onDelete") onDelete = new EventEmitter();
+
+  static createFormGroup(formBuilder: FormBuilder): FormGroup {
+    return formBuilder.group({
+      site: ['', Validators.required],
+      room: ['', Validators.required],
+      door: ['', Validators.required]
+    })
+  }
+
+  private deleteLocation() {
+    this.onDelete.emit(this.locationNumber);
+  }
 }

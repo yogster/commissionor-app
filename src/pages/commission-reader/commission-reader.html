@@ -31,9 +31,20 @@
 
     </ion-list>
 
-    <h3>Location details</h3>
+    <div float-start padding-top>
+      <h3>Location details</h3>
+    </div>
+    <div float-end>
+      <button ion-button type="button" color="secondary" clear icon-only (click)="addLocation()">
+        <ion-icon name="add-circle"></ion-icon>
+      </button>
+    </div>
 
-    <location></location>
+    <div formArrayName="locations">
+        <div *ngFor="let location of locations.controls; let i = index;">
+            <location [locationNumber]="i + 1" (onDelete)="deleteLocation()"></location>
+        </div>
+    </div>
 
     <button ion-button block type="submit" [disabled]="!form.valid">Commission</button>
   </form>

@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { Validators, FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { CommissionorProvider } from '../../providers/commissionor/commissionor';
 import { SettingsProvider } from '../../providers/settings/settings';
 import { Reader } from '../../providers/commissionor/reader';
+import { LocationComponent } from '../../components/location/location';
 
 @Component({
   selector: 'page-commission-reader',
@@ -12,9 +13,11 @@ import { Reader } from '../../providers/commissionor/reader';
 export class CommissionReaderPage {
 
   private form : FormGroup;
+  private locations: FormArray;
 
   constructor(private formBuilder: FormBuilder, private settings: SettingsProvider, private commissionor: CommissionorProvider) {
     this.setupForm();
+    this.addLocation();
     this.commissionor.subscribeToEvents(eventData => this.onTap(eventData));
   }
 
@@ -27,10 +30,12 @@ export class CommissionReaderPage {
   }
 
   private setupForm() {
+    this.locations = this.formBuilder.array([]);
     this.form = this.formBuilder.group({
       readerId: ['', Validators.required],
       placement: ['', Validators.required],
-      description: ['', Validators.required]
+      description: ['', Validators.required],
+      locations: this.locations
     });
   }
 
@@ -61,5 +66,17 @@ export class CommissionReaderPage {
       () => alert("Reader commissioned"),
       error => alert(error.message)
     );
+  }
+
+  private addLocation() {
+    var newLocationFormGroup = LocationComponent.createFormGroup(this.formBuilder);
+    this.locations.push(newLocationFormGroup);
+  }
+
+  private deleteLocation(locationNumber: number) {
+    if (this.locations.length > 1)
+      this.locations.removeAt(locationNumber - 1);
+    else
+      alert("There must be at least one location");
   }
 }

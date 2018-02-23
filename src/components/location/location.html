@@ -1,5 +1,16 @@
 <ion-card>
 
+  <ion-card-header>
+    <div class="title" float-start>
+        Location {{locationNumber}}
+    </div>
+    <div float-end>
+      <button ion-button type="button" color="danger" clear small icon-only (click)="deleteLocation()">
+        <ion-icon name="trash"></ion-icon>
+      </button>
+    </div>
+  </ion-card-header>
+
   <ion-card-content>
 
     <ion-list>
