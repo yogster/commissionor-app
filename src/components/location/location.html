@@ -13,21 +13,21 @@
 
   <ion-card-content>
 
-    <ion-list>
+    <ion-list [formGroup] = "form">
     
       <ion-item>
         <ion-label stacked>Site</ion-label>
-        <ion-input type="text"></ion-input>
+        <ion-input type="text" formControlName="site"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label stacked>Room</ion-label>
-        <ion-input type="text"></ion-input>
+        <ion-input type="text" formControlName="room"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label stacked>Door</ion-label>
-        <ion-input type="text"></ion-input>
+        <ion-input type="text" formControlName="door"></ion-input>
       </ion-item>
     
     </ion-list>

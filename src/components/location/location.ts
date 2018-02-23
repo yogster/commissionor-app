@@ -13,8 +13,9 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 })
 export class LocationComponent {
 
-  @Input("locationNumber") locationNumber: number;
-  @Output("onDelete") onDelete = new EventEmitter();
+  @Input() form: FormGroup;
+  @Input() locationNumber: number;
+  @Output() onDelete = new EventEmitter<number>();
 
   static createFormGroup(formBuilder: FormBuilder): FormGroup {
     return formBuilder.group({

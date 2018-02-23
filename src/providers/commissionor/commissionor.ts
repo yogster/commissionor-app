@@ -4,6 +4,7 @@ import { Events } from 'ionic-angular';
 import { HubConnection } from '@aspnet/signalr-client';
 import { Reader } from './reader';
 import { Observable } from "rxjs/Observable";
+import { ReaderLocation } from './reader-location';
 
 @Injectable()
 export class CommissionorProvider {
@@ -38,7 +39,10 @@ export class CommissionorProvider {
   }
 
   commissionReader(reader: Reader): Observable<string> {
-    //let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.put(this.url + "api/readers/" + reader.id, reader, { responseType: "text" });
+  }
+
+  addReaderLocation(location: ReaderLocation): Observable<string> {
+    return this.http.post(this.url + "api/readers/" + location.readerId + "/locations", location, { responseType: "text" });
   }
 }

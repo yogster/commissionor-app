@@ -42,10 +42,11 @@
 
     <div formArrayName="locations">
         <div *ngFor="let location of locations.controls; let i = index;">
-            <location [locationNumber]="i + 1" (onDelete)="deleteLocation()"></location>
+            <location [form]="location" [locationNumber]="i + 1" (onDelete)="deleteLocation($event)"></location>
         </div>
     </div>
 
-    <button ion-button block type="submit" [disabled]="!form.valid">Commission</button>
+    <button ion-button block type="submit" [disabled]="!form.valid || commissioned">Commission</button>
+    <button ion-button block type="reset" color="light" (click)="resetForm()">Clear</button>
   </form>
 </ion-content>
