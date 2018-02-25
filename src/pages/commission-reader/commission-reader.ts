@@ -101,8 +101,15 @@ export class CommissionReaderPage {
   }
 
   private resetForm() {
+    this.resetLocations();
+    this.addLocation();
     this.form.reset();
     this.commissioned = false;
+  }
+
+  private resetLocations() {
+    while (this.locations.length > 0)
+      this.locations.removeAt(0);
   }
 
   private addLocation(location?: ReaderLocation) {
@@ -124,13 +131,12 @@ export class CommissionReaderPage {
         reader => {
           this.form.patchValue({
             placement: reader.placement,
-            description: reader.description,
-            locations: this.locations
+            description: reader.description
           });
 
-          this.locations.reset();
+          this.resetLocations();
           if (reader.locations.length > 0)
-            reader.locations.forEach(this.addLocation);
+            reader.locations.forEach(location => this.addLocation(location));
           else
             this.addLocation();
         },
