@@ -45,4 +45,8 @@ export class CommissionorProvider {
   addReaderLocation(location: ReaderLocation): Observable<string> {
     return this.http.post(this.url + "api/readers/" + location.readerId + "/locations", location, { responseType: "text" });
   }
+
+  getReaderDetails(readerId: string): Observable<Reader> {
+    return this.http.get<Reader>(this.url + "api/readers/" + readerId);
+  }
 }

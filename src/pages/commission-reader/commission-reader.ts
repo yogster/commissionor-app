@@ -7,6 +7,7 @@ import { LocationComponent } from '../../components/location/location';
 import { ReaderLocation } from '../../providers/commissionor/reader-location';
 import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/concat";
+import { NavParams } from 'ionic-angular';
 
 @Component({
   selector: 'page-commission-reader',
@@ -18,8 +19,10 @@ export class CommissionReaderPage {
   private form : FormGroup;
   private locations: FormArray;
   private commissioned: boolean = false;
+  private replace: boolean = false;
 
-  constructor(private formBuilder: FormBuilder, private settings: SettingsProvider, private commissionor: CommissionorProvider) {
+  constructor(navParams: NavParams, private formBuilder: FormBuilder, private settings: SettingsProvider, private commissionor: CommissionorProvider) {
+    this.replace = !!navParams.get('replace');
     this.setupForm();
     this.addLocation();
     this.commissionor.subscribeToEvents(eventData => this.onTap(eventData));
@@ -36,6 +39,7 @@ export class CommissionReaderPage {
   private setupForm() {
     this.locations = this.formBuilder.array([]);
     this.form = this.formBuilder.group({
+      installedReaderId: ['', this.replace ? Validators.required : Validators.nullValidator],
       readerId: ['', Validators.required],
       placement: ['', Validators.required],
       description: ['', Validators.required],
@@ -55,9 +59,10 @@ export class CommissionReaderPage {
   }
 
   private onTap(eventData: any) {
-    this.form.patchValue({
-      readerId: eventData.readerId
-    });
+    if (this.replace && !this.form.value.installedReaderId)
+      this.form.patchValue({ installedReaderId: eventData.readerId });
+    else
+      this.form.patchValue({ readerId: eventData.readerId });
   }
 
   private commissionReader() {
@@ -100,8 +105,8 @@ export class CommissionReaderPage {
     this.commissioned = false;
   }
 
-  private addLocation() {
-    var newLocationFormGroup = LocationComponent.createFormGroup(this.formBuilder);
+  private addLocation(location?: ReaderLocation) {
+    let newLocationFormGroup = LocationComponent.createFormGroup(this.formBuilder, location);
     this.locations.push(newLocationFormGroup);
   }
 
@@ -110,5 +115,28 @@ export class CommissionReaderPage {
       this.locations.removeAt(locationNumber - 1);
     else
       alert("There must be at least one location");
+  }
+
+  private onInstalledReaderIdChanged() {
+    let installedReaderId = this.form.value.installedReaderId;
+    if (installedReaderId)
+      this.commissionor.getReaderDetails(installedReaderId).subscribe(
+        reader => {
+          this.form.patchValue({
+            placement: reader.placement,
+            description: reader.description,
+            locations: this.locations
+          });
+
+          this.locations.reset();
+          if (reader.locations.length > 0)
+            reader.locations.forEach(this.addLocation);
+          else
+            this.addLocation();
+        },
+        error => alert(error.message)
+      );
+    else
+      this.resetForm();
   }
 }

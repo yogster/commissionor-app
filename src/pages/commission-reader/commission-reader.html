@@ -14,6 +14,11 @@
   <form [formGroup]="form" (ngSubmit)="commissionReader()">
     <ion-list>
 
+      <ion-item *ngIf="replace" >
+        <ion-label stacked>Installed reader ID</ion-label>
+        <ion-input type="text" formControlName="installedReaderId" (change)="onInstalledReaderIdChanged()" ></ion-input>
+      </ion-item>
+
       <ion-item>
         <ion-label stacked>Reader ID</ion-label>
         <ion-input type="text" formControlName="readerId" ></ion-input>

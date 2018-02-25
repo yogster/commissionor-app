@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ReaderLocation } from '../../providers/commissionor/reader-location';
 
 /**
  * Generated class for the LocationComponent component.
@@ -17,11 +18,11 @@ export class LocationComponent {
   @Input() locationNumber: number;
   @Output() onDelete = new EventEmitter<number>();
 
-  static createFormGroup(formBuilder: FormBuilder): FormGroup {
+  static createFormGroup(formBuilder: FormBuilder, location: ReaderLocation): FormGroup {
     return formBuilder.group({
-      site: ['', Validators.required],
-      room: ['', Validators.required],
-      door: ['', Validators.required]
+      site: [location ? location.site : '', Validators.required],
+      room: [location ? location.room : '', Validators.required],
+      door: [location ? location.door : '', Validators.required]
     })
   }
 
