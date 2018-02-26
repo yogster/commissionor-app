@@ -49,4 +49,8 @@ export class CommissionorProvider {
   getReaderDetails(readerId: string): Observable<Reader> {
     return this.http.get<Reader>(this.url + "api/readers/" + readerId);
   }
+
+  deleteReader(readerId: string): Observable<string> {
+    return this.http.delete(this.url + "api/readers/" + readerId, { responseType: "text"});
+  }
 }

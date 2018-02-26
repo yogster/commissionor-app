@@ -65,14 +65,29 @@ export class CommissionReaderPage {
       this.form.patchValue({ readerId: eventData.readerId });
   }
 
+  private onSubmit() {
+    this.replace ? this.replaceReader() : this.commissionReader();
+  }
+
+  private replaceReader() {
+    let installedReaderId = this.form.value.installedReaderId;
+    this.commissionor.deleteReader(installedReaderId).subscribe(
+      () => {
+        alert("Installed reader deleted");
+        this.commissionReader();
+      },
+      error => alert(error.message)
+    );
+  }
+
   private commissionReader() {
-    var reader = new Reader();
+    let reader = new Reader();
     reader.id = this.form.value.readerId;
     reader.placement = this.form.value.placement;
     reader.description = this.form.value.description;
 
-    var locations = this.form.value.locations.map(formLocation => {
-      var location = new ReaderLocation();
+    let locations = this.form.value.locations.map(formLocation => {
+      let location = new ReaderLocation();
       location.door = formLocation.door;
       location.readerId = reader.id;
       location.room = formLocation.room;
@@ -87,7 +102,7 @@ export class CommissionReaderPage {
 
         let concatObservable: Observable<string>;
         locations.forEach(async location => {
-          var locationObservable = this.commissionor.addReaderLocation(location);
+          let locationObservable = this.commissionor.addReaderLocation(location);
           concatObservable = concatObservable ? concatObservable.concat(locationObservable) : locationObservable;
         });
 

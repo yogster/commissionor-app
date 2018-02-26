@@ -3,7 +3,7 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Commission Reader</ion-title>
+    <ion-title>{{ this.replace ? "Replace" : "Commission"}} Reader</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -11,7 +11,7 @@
 
   <h3>Reader details</h3>
 
-  <form [formGroup]="form" (ngSubmit)="commissionReader()">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <ion-list>
 
       <ion-item *ngIf="replace" >
@@ -51,7 +51,7 @@
         </div>
     </div>
 
-    <button ion-button block type="submit" [disabled]="!form.valid || commissioned">Commission</button>
+    <button ion-button block type="submit" [disabled]="!form.valid || commissioned">{{ this.replace ? "Replace" : "Commission"}}</button>
     <button ion-button block type="reset" color="light" (click)="resetForm()">Clear</button>
   </form>
 </ion-content>
