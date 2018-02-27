@@ -7,7 +7,7 @@ import { LocationComponent } from '../../components/location/location';
 import { ReaderLocation } from '../../providers/commissionor/reader-location';
 import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/concat";
-import { NavParams } from 'ionic-angular';
+import { NavParams, AlertController } from 'ionic-angular';
 
 @Component({
   selector: 'page-commission-reader',
@@ -21,7 +21,7 @@ export class CommissionReaderPage {
   private commissioned: boolean = false;
   private replace: boolean = false;
 
-  constructor(navParams: NavParams, private formBuilder: FormBuilder, private settings: SettingsProvider, private commissionor: CommissionorProvider) {
+  constructor(navParams: NavParams, private formBuilder: FormBuilder, private alertCtl: AlertController, private settings: SettingsProvider, private commissionor: CommissionorProvider) {
     this.replace = !!navParams.get('replace');
     this.setupForm();
     this.addLocation();
@@ -51,10 +51,10 @@ export class CommissionReaderPage {
     this.settings.getCommissionorServerUrl().then(url => {
       if (url)
         this.commissionor.openEventConnection(url).catch(err => {
-          alert("Connection error");
+          this.alert("Connection error");
         });
       else
-        alert("No server URL");
+        this.alert("No server URL");
     });
   }
 
@@ -73,10 +73,10 @@ export class CommissionReaderPage {
     let installedReaderId = this.form.value.installedReaderId;
     this.commissionor.deleteReader(installedReaderId).subscribe(
       () => {
-        alert("Installed reader deleted");
+        this.alert("Installed reader deleted");
         this.commissionReader();
       },
-      error => alert(error.message)
+      error => this.alert(error.message)
     );
   }
 
@@ -97,7 +97,7 @@ export class CommissionReaderPage {
 
     this.commissionor.commissionReader(reader).subscribe(
       () => {
-        alert("Reader commissioned");
+        this.alert("Reader commissioned");
         this.commissioned = true;
 
         let concatObservable: Observable<string>;
@@ -107,11 +107,11 @@ export class CommissionReaderPage {
         });
 
         concatObservable.subscribe(
-          () => alert("Locations added"),
-          error => alert(error.message)
+          () => this.alert("Locations added"),
+          error => this.alert(error.message)
         );
       },
-      error => alert(error.message)
+      error => this.alert(error.message)
     );
   }
 
@@ -136,7 +136,7 @@ export class CommissionReaderPage {
     if (this.locations.length > 1)
       this.locations.removeAt(locationNumber - 1);
     else
-      alert("There must be at least one location");
+      this.alert("There must be at least one location");
   }
 
   private onInstalledReaderIdChanged() {
@@ -155,9 +155,19 @@ export class CommissionReaderPage {
           else
             this.addLocation();
         },
-        error => alert(error.message)
+        error => this.alert(error.message)
       );
     else
       this.resetForm();
+  }
+
+  private alert(message: string) {
+    console.log("alert: " + message)
+    this.alertCtl
+      .create({
+        subTitle: message,
+        buttons: ['Ok']
+      })
+      .present();
   }
 }
