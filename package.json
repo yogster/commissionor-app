@@ -42,7 +42,12 @@
   "cordova": {
     "plugins": {
       "phonegap-nfc": {},
-      "cordova-sqlite-storage": {}
+      "cordova-sqlite-storage": {},
+      "cordova-plugin-ionic": {
+        "APP_ID": "630b9c57",
+        "CHANNEL_NAME": "Master",
+        "UPDATE_METHOD": "background"
+      }
     }
   },
   "config": {
