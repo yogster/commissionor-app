@@ -12,12 +12,16 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { SettingsProvider } from '../providers/settings/settings';
 import { HttpClientModule } from '@angular/common/http';
 import { ComponentsModule } from '../components/components.module';
+import { DownloadDataPage } from '../pages/download-data/download-data';
+import { File } from '@ionic-native/file';
+import { SocialSharing } from '@ionic-native/social-sharing';
 
 @NgModule({
   declarations: [
     MyApp,
     CommissionReaderPage,
-    SettingsPage
+    SettingsPage,
+    DownloadDataPage
   ],
   imports: [
     BrowserModule,
@@ -30,13 +34,16 @@ import { ComponentsModule } from '../components/components.module';
   entryComponents: [
     MyApp,
     CommissionReaderPage,
-    SettingsPage
+    SettingsPage,
+    DownloadDataPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    SettingsProvider
+    SettingsProvider,
+    File,
+    SocialSharing
   ]
 })
 export class AppModule {}

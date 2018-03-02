@@ -5,6 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { CommissionReaderPage } from '../pages/commission-reader/commission-reader';
 import { SettingsPage } from '../pages/settings/settings';
+import { DownloadDataPage } from '../pages/download-data/download-data';
 
 @Component({
   templateUrl: 'app.html'
@@ -23,6 +24,7 @@ export class MyApp {
     this.pages = [
       { title: 'Commission Reader', component: CommissionReaderPage },
       { title: 'Replace Reader', component: CommissionReaderPage, parameters: { replace: true } },
+      { title: 'Download Data', component: DownloadDataPage },
       { title: 'Settings', component: SettingsPage }
     ];
 

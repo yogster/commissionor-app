@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Events } from 'ionic-angular';
-import { HubConnection } from '@aspnet/signalr-client';
+import { HubConnection } from '@aspnet/signalr';
 import { Reader } from './reader';
 import { Observable } from "rxjs/Observable";
 import { ReaderLocation } from './reader-location';
+import { SettingsProvider } from '../settings/settings';
 
 @Injectable()
 export class CommissionorProvider {
@@ -15,10 +16,13 @@ export class CommissionorProvider {
   constructor(private events: Events, private http: HttpClient) {
   }
 
-  openEventConnection(url: string) : Promise<void> {
-    this.closeEventConnection();
+  initialise(url: string) {
     this.url = url;
-    this.connection = new HubConnection(url + "api/events");
+  }
+
+  openEventConnection() : Promise<void> {
+    this.closeEventConnection();
+    this.connection = new HubConnection(this.url + "api/events");
     this.connection.on('event', data => this.events.publish("commissionor:tap", data));
     return this.connection.start();
   }
@@ -52,5 +56,9 @@ export class CommissionorProvider {
 
   deleteReader(readerId: string): Observable<string> {
     return this.http.delete(this.url + "api/readers/" + readerId, { responseType: "text"});
+  }
+
+  getReaders(): Observable<Array<Reader>> {
+    return this.http.get<Array<Reader>>(this.url + "api/readers");
   }
 }
