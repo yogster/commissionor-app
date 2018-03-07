@@ -51,9 +51,8 @@ export class CommissionReaderPage {
     this.settings.getCommissionorServerUrl().then(url => {
       if (url) {
         this.commissionor.initialise(url);
-        this.commissionor.openEventConnection().catch(err => {
-          this.alert("Connection error");
-        });
+        this.commissionor.openEventConnection()
+          .catch(error => this.alert(error.message));
       }
       else
         this.alert("No server URL");
