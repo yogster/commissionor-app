@@ -3,16 +3,18 @@ import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { SettingsProvider } from '../../providers/settings/settings';
 import { NFC } from '@ionic-native/nfc';
 import { AlertController, Alert } from 'ionic-angular';
+import { CommissionorProvider } from '../../providers/commissionor/commissionor';
 
 @Component({
   selector: 'page-settings',
   templateUrl: 'settings.html',
+  providers: [CommissionorProvider]
 })
 export class SettingsPage {
 
   private form : FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private settings: SettingsProvider, private nfc: NFC, private alertCtl: AlertController) {
+  constructor(private formBuilder: FormBuilder, private settings: SettingsProvider, private commissionor: CommissionorProvider, private nfc: NFC, private alertCtl: AlertController) {
     this.form = this.formBuilder.group({
       serverUrl: ['', Validators.required],
       cardId: ['', Validators.required]
@@ -42,27 +44,60 @@ export class SettingsPage {
     this.settings.setCardId(this.form.value.cardId);
   }
 
-  private pairCard() {
-    let alert: Alert;
-    let obs = this.nfc.addTagDiscoveredListener(
-      () => {
-        alert = this.alert('Tap your card on the back of your device to pair it to Comissionor', [ "cancel"]);
-        alert.present().then(() => obs.unsubscribe())
-      }, 
-      () => this.alert('error attaching ndef listener')
-    )
-    .subscribe((event) => {
-      obs.unsubscribe();
-      alert.dismiss();
-      this.alert(JSON.stringify(event)).present();
-    });
+  // private getCardId() {
+  //   let alert: Alert;
+  //   let obs = this.nfc.addTagDiscoveredListener(
+  //     () => {
+  //       alert = this.alert('Please tap your card on the back of your device to pair it to Comissionor', [ "cancel"]);
+  //       alert.present().then(() => obs.unsubscribe())
+  //     }, 
+  //     () => this.alert('error attaching ndef listener')
+  //   )
+  //   .subscribe((event) => {
+  //     obs.unsubscribe();
+  //     alert.dismiss();
+  //     this.alert(JSON.stringify(event)).present();
+  //   });
+  // }
+
+  private getDeviceId() {
+    var url = this.form.value.serverUrl;
+    if (url) {
+      let alert: Alert;
+      let eventSubscription = this.commissionor.tapEvent.subscribe(data => {
+        eventSubscription.unsubscribe();
+        alert.dismiss();
+        this.form.patchValue({ cardId: data.deviceId });
+      });
+
+      this.commissionor.initialise(url);
+      this.commissionor.openEventConnection()
+        .then(() => {
+          alert = this.alertCtl.create({
+            subTitle: "Please tap your device against a card reader",
+            buttons: [
+              {
+                text: 'Cancel',
+                role: 'cancel',
+                handler: () => eventSubscription.unsubscribe()
+              }
+            ]
+          });
+          alert.present();
+        })
+      .catch(() => this.alert("Could not connect to server"));
+    }
+    else
+      this.alert("Enter a server URL first");
   }
 
-  private alert(message: string, buttons: Array<string> = [ "ok" ]): Alert {
+  private alert(message: string) {
     console.log("alert: " + message)
-    return this.alertCtl.create({
-      subTitle: message,
-      buttons: buttons
-    });
+    this.alertCtl
+      .create({
+        subTitle: message,
+        buttons: ['Ok']
+      })
+      .present();
   }
 }
