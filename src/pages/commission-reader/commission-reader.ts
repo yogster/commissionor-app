@@ -52,7 +52,7 @@ export class CommissionReaderPage {
       if (url) {
         this.commissionor.initialise(url);
         this.commissionor.openEventConnection()
-          .catch(error => this.alert(error.message));
+          .catch(() => this.alert("Could not connect to server"));
       }
       else
         this.alert("No server URL");
