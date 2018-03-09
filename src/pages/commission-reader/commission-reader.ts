@@ -16,6 +16,7 @@ import { NavParams, AlertController } from 'ionic-angular';
 })
 export class CommissionReaderPage {
 
+  private eventSubscription: any;
   private form : FormGroup;
   private locations: FormArray;
   private commissioned: boolean = false;
@@ -25,7 +26,7 @@ export class CommissionReaderPage {
     this.replace = !!navParams.get('replace');
     this.setupForm();
     this.addLocation();
-    this.commissionor.subscribeToEvents(eventData => this.onTap(eventData));
+    this.eventSubscription = this.commissionor.tapEvent.subscribe(data => this.onTap(data));
   }
 
   ionViewWillEnter() {
@@ -33,7 +34,7 @@ export class CommissionReaderPage {
   }
 
   ionViewDidLeave() {
-    this.commissionor.closeEventConnection();
+    this.eventSubscription.unsubscribe();
   }
 
   private setupForm() {

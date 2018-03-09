@@ -1,19 +1,21 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Events } from 'ionic-angular';
+import { Injectable, EventEmitter, Output } from '@angular/core';
 import { HubConnection } from '@aspnet/signalr';
 import { Reader } from './reader';
 import { Observable } from "rxjs/Observable";
 import { ReaderLocation } from './reader-location';
 import { SettingsProvider } from '../settings/settings';
+import { TapEvent } from './tapEvent';
 
 @Injectable()
 export class CommissionorProvider {
 
   private url: string;
   private connection: HubConnection;
+  private eventEmitter: EventEmitter<TapEvent>;
 
-  constructor(private events: Events, private http: HttpClient) {
+  constructor(private http: HttpClient) {
+    this.eventEmitter = new EventEmitter<TapEvent>();
   }
 
   initialise(url: string) {
@@ -23,7 +25,7 @@ export class CommissionorProvider {
   openEventConnection() : Promise<void> {
     this.closeEventConnection();
     this.connection = new HubConnection(this.url + "api/events");
-    this.connection.on('event', data => this.events.publish("commissionor:tap", data));
+    this.connection.on('event', data => this.eventEmitter.emit(data));
     return this.connection.start();
   }
 
@@ -34,12 +36,9 @@ export class CommissionorProvider {
     }
   }
 
-  subscribeToEvents(handler: (data: any) => void) {
-    this.events.subscribe("commissionor:tap", handler);
-  }
-
-  unsubscribeFromEvents(handler: (data: any) => void) {
-    this.events.unsubscribe("commissionor:tap", handler);
+  @Output()
+  get tapEvent(): EventEmitter<TapEvent> {
+    return this.eventEmitter;
   }
 
   commissionReader(reader: Reader): Observable<string> {
