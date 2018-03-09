@@ -44,7 +44,7 @@ export class SettingsPage {
     this.settings.setCardId(this.form.value.cardId);
   }
 
-  private getCardId() {
+  private tapOnDevice() {
     this.nfc.enabled().then(enabled => {
       if (enabled) {
         let alert: Alert;
@@ -76,7 +76,7 @@ export class SettingsPage {
     .catch((error) => this.alert(error));
   }
 
-  private getDeviceId() {
+  private TapOnReader() {
     var url = this.form.value.serverUrl;
     if (url) {
       let alert: Alert;
