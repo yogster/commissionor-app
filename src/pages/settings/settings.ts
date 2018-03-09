@@ -12,12 +12,18 @@ export class SettingsPage {
 
   constructor(private formBuilder: FormBuilder, private settings: SettingsProvider) {
     this.form = this.formBuilder.group({
-      serverUrl: ['', Validators.required]
+      serverUrl: ['', Validators.required],
+      cardId: ['', Validators.required]
     });
 
-    this.settings.getCommissionorServerUrl().then(url => 
+    Promise.all([
+      this.settings.getCommissionorServerUrl(),
+      this.settings.getCardId(),
+    ])
+    .then(([url, cardId]) => 
       this.form = this.formBuilder.group({
-        serverUrl: [url, Validators.required]
+        serverUrl: [url, Validators.required],
+        cardId: [cardId, Validators.required]
       })
     );
   }
@@ -31,6 +37,6 @@ export class SettingsPage {
 
   private saveSettings() {
     this.settings.setCommissionorServerUrl(this.form.value.serverUrl);
+    this.settings.setCardId(this.form.value.cardId);
   }
-
 }

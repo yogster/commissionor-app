@@ -14,4 +14,12 @@ export class SettingsProvider {
   public getCommissionorServerUrl(): Promise<string> {
     return this.storage.get("commissionor:serverUrl");
   }
+
+  setCardId(cardId: string) {
+    this.storage.set("commissionor:cardId", cardId);
+  }
+  
+  getCardId(): Promise<string> {
+    return this.storage.get("commissionor:cardId");
+  }
 }

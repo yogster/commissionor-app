@@ -16,10 +16,15 @@
           <ion-label stacked>Commissionor server URL</ion-label>
           <ion-input type="url" formControlName="serverUrl" (ionBlur)="onServerUrlBlur()" ></ion-input>
         </ion-item>
+
+        <ion-item>
+          <ion-label stacked>Card ID</ion-label>
+          <ion-input type="text" formControlName="cardId" ></ion-input>
+        </ion-item>
   
       </ion-list>
   
-      <button ion-button block type="submit" [disabled]="!form.valid">Save settings</button>
+      <button ion-button block type="submit">Save settings</button>
     </form>
 
 </ion-content>
