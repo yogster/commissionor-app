@@ -91,4 +91,7 @@
     <engine name="ios" spec="~4.5.4" />
     <plugin name="cordova-plugin-x-socialsharing" spec="^5.3.1" />
     <engine name="android" spec="~7.0.0" />
+    <plugin name="phonegap-nfc" spec="^0.7.1">
+        <variable name="NFC_USAGE_DESCRIPTION" value="Read NFC Tags" />
+    </plugin>
 </widget>
