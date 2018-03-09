@@ -90,7 +90,7 @@ export class SettingsPage {
       this.commissionor.openEventConnection()
         .then(() => {
           alert = this.alertCtl.create({
-            subTitle: "Please tap your device against a card reader",
+            subTitle: "Please tap your card or device against a card reader.",
             buttons: [
               {
                 text: 'Cancel',
