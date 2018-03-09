@@ -26,7 +26,7 @@ export class CommissionReaderPage {
     this.replace = !!navParams.get('replace');
     this.setupForm();
     this.addLocation();
-    this.eventSubscription = this.commissionor.tapEvent.subscribe(data => this.onTap(data));
+    this.listenToTapEvents();
   }
 
   ionViewWillEnter() {
@@ -34,7 +34,8 @@ export class CommissionReaderPage {
   }
 
   ionViewDidLeave() {
-    this.eventSubscription.unsubscribe();
+    if (this.eventSubscription)
+      this.eventSubscription.unsubscribe();
   }
 
   private setupForm() {
@@ -60,11 +61,23 @@ export class CommissionReaderPage {
     });
   }
 
-  private onTap(eventData: any) {
-    if (this.replace && !this.form.value.installedReaderId)
-      this.form.patchValue({ installedReaderId: eventData.readerId });
-    else
-      this.form.patchValue({ readerId: eventData.readerId });
+  private listenToTapEvents() {
+    this.settings.getCardId()
+      .then(cardId => {
+        if (cardId) {
+          this.eventSubscription = this.commissionor.tapEvent.subscribe(data => {
+            if (data.deviceId === cardId) {
+              if (this.replace && !this.form.value.installedReaderId)
+                this.form.patchValue({ installedReaderId: data.readerId });
+              else
+                this.form.patchValue({ readerId: data.readerId });
+            }
+          });
+        }
+        else
+          this.alert("No card or device Id");
+      })
+      .catch(error => this.alert(error.message));
   }
 
   private onSubmit() {
