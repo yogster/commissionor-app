@@ -44,21 +44,37 @@ export class SettingsPage {
     this.settings.setCardId(this.form.value.cardId);
   }
 
-  // private getCardId() {
-  //   let alert: Alert;
-  //   let obs = this.nfc.addTagDiscoveredListener(
-  //     () => {
-  //       alert = this.alert('Please tap your card on the back of your device to pair it to Comissionor', [ "cancel"]);
-  //       alert.present().then(() => obs.unsubscribe())
-  //     }, 
-  //     () => this.alert('error attaching ndef listener')
-  //   )
-  //   .subscribe((event) => {
-  //     obs.unsubscribe();
-  //     alert.dismiss();
-  //     this.alert(JSON.stringify(event)).present();
-  //   });
-  // }
+  private getCardId() {
+    this.nfc.enabled().then(enabled => {
+      if (enabled) {
+        let alert: Alert;
+        let obs = this.nfc.addTagDiscoveredListener(
+          () => {
+            alert = this.alertCtl.create({
+              subTitle: "Please tap your card on the back of your device",
+              buttons: [
+                {
+                  text: 'Cancel',
+                  role: 'cancel',
+                  handler: () => obs.unsubscribe()
+                }
+              ]
+            });
+            alert.present();
+          }, 
+          () => this.alert('Error listening for cards')
+        )
+        .subscribe((event) => {
+          obs.unsubscribe();
+          alert.dismiss();
+          this.alert(JSON.stringify(event));
+        });
+      }
+      else
+        this.alert('Please enable NFC to use this feature')
+    })
+    .catch((error) => this.alert(error));
+  }
 
   private getDeviceId() {
     var url = this.form.value.serverUrl;
