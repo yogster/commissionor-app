@@ -15,6 +15,7 @@ import { ComponentsModule } from '../components/components.module';
 import { DownloadDataPage } from '../pages/download-data/download-data';
 import { File } from '@ionic-native/file';
 import { SocialSharing } from '@ionic-native/social-sharing';
+import { NFC } from '@ionic-native/nfc';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { SocialSharing } from '@ionic-native/social-sharing';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     SettingsProvider,
     File,
-    SocialSharing
+    SocialSharing,
+    NFC
   ]
 })
 export class AppModule {}

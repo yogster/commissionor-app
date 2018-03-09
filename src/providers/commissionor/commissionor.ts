@@ -4,7 +4,6 @@ import { HubConnection } from '@aspnet/signalr';
 import { Reader } from './reader';
 import { Observable } from "rxjs/Observable";
 import { ReaderLocation } from './reader-location';
-import { SettingsProvider } from '../settings/settings';
 import { TapEvent } from './tapEvent';
 
 @Injectable()
