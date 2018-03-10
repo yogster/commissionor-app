@@ -13,7 +13,7 @@ import { DownloadDataPage } from '../pages/download-data/download-data';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = SettingsPage;
+  rootPage: any = CommissionReaderPage;
 
   pages: Array<{title: string, component: any, parameters?: object}>;
 
