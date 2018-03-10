@@ -67,7 +67,7 @@ export class SettingsPage {
         .subscribe((event) => {
           obs.unsubscribe();
           alert.dismiss();
-          this.alert(JSON.stringify(event));
+          this.form.patchValue({ cardId: this.nfc.bytesToHexString(event.tag.id) });
         });
       }
       else
