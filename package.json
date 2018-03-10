@@ -1,8 +1,8 @@
 {
-  "name": "commissionor-app",
-  "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "http://ionicframework.com/",
+  "name": "commissionor",
+  "version": "1.0.0",
+  "author": "Commissionor",
+  "homepage": "https://github.com/yogster/commissionor-app",
   "private": true,
   "scripts": {
     "clean": "ionic-app-scripts clean",
