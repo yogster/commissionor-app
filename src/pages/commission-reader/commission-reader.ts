@@ -65,8 +65,9 @@ export class CommissionReaderPage {
     this.settings.getCardId()
       .then(cardId => {
         if (cardId) {
+          cardId = cardId.toUpperCase();
           this.eventSubscription = this.commissionor.tapEvent.subscribe(data => {
-            if (data.deviceId === cardId) {
+            if (data.deviceId.toUpperCase() === cardId) {
               if (this.replace && !this.form.value.installedReaderId)
                 this.form.patchValue({ installedReaderId: data.readerId });
               else
